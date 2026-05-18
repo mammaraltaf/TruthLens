@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs ls *)",
+      "Bash(cat /d/laragon/www/TruthLens/app/Enums/*.php)",
+      "Bash(php artisan *)"
+    ]
+  }
+}
