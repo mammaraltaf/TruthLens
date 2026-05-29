@@ -22,7 +22,13 @@ class StoreArticleRequest extends FormRequest
             'submission_type' => ['required', Rule::enum(ArticleSubmissionType::class)],
             'url' => ['nullable', 'required_if:submission_type,'.ArticleSubmissionType::Url->value, 'url', 'max:2048'],
             'content' => ['nullable', 'required_if:submission_type,'.ArticleSubmissionType::Text->value, 'string', 'min:40'],
-            'title' => ['nullable', 'string', 'max:500'],
+            'title' => [
+                'nullable',
+                'required_if:submission_type,'.ArticleSubmissionType::Url->value,
+                'string',
+                'min:10',
+                'max:500',
+            ],
             'category' => ['nullable', 'string', 'max:120'],
         ];
     }

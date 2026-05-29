@@ -35,6 +35,12 @@ return [
         ],
     ],
 
+    'http' => [
+        'ca_bundle' => env('HTTP_CLIENT_CA_BUNDLE'),
+        // Local Laragon installs often ship an outdated CA bundle; production should keep verification on.
+        'verify_ssl' => env('HTTP_VERIFY_SSL', env('APP_ENV', 'production') === 'production'),
+    ],
+
     'google_fact_check' => [
         'key' => env('GOOGLE_FACT_CHECK_API_KEY'),
         'language' => env('GOOGLE_FACT_CHECK_LANGUAGE', 'en-US'),

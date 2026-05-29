@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Http;
+use App\Support\OutboundHttp;
 
 class GoogleFactCheckClient
 {
@@ -15,7 +15,8 @@ class GoogleFactCheckClient
 
         $language = config('services.google_fact_check.language', 'en-US');
 
-        $response = Http::timeout(25)
+        $response = OutboundHttp::client()
+            ->timeout(25)
             ->acceptJson()
             ->get('https://factchecktools.googleapis.com/v1alpha1/claims:search', [
                 'key' => $key,

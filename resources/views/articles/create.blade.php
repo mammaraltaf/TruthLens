@@ -41,8 +41,9 @@
 
                     <div class="row g-3 mb-2">
                         <div class="col-md-6">
-                            <label for="title" class="form-label fw-semibold">Title <span class="text-muted fw-normal small">(optional)</span></label>
-                            <input type="text" name="title" id="title" value="{{ old('title') }}" class="form-control" placeholder="Headline override">
+                            <label for="title" class="form-label fw-semibold">Title <span class="text-muted fw-normal small" id="title-required-hint">(required for URL)</span></label>
+                            <input type="text" name="title" id="title" value="{{ old('title') }}" class="form-control" placeholder="State the claim being checked, e.g. 5G spreads COVID-19" required>
+                            <div class="form-text">Use a specific claim or rumor, not a neutral news headline. Matching works best on the title.</div>
                         </div>
                         <div class="col-md-6">
                             <label for="category" class="form-label fw-semibold">Category <span class="text-muted fw-normal small">(optional)</span></label>
@@ -73,6 +74,8 @@
                 textWrap.classList.toggle('opacity-50', isUrl);
                 document.getElementById('url').toggleAttribute('disabled', !isUrl);
                 document.getElementById('content').toggleAttribute('disabled', isUrl);
+                document.getElementById('title').required = isUrl;
+                document.getElementById('title-required-hint').textContent = isUrl ? '(required for URL)' : '(recommended)';
             }
             type.addEventListener('change', sync);
             sync();

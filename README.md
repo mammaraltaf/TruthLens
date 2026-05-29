@@ -40,6 +40,24 @@ php artisan serve
 
 Use `QUEUE_CONNECTION=sync` in `.env` for immediate analysis, or run `php artisan queue:work` when using the database queue driver.
 
+### SSL errors on Windows (cURL error 60)
+
+When `APP_ENV=local`, outbound HTTPS verification is disabled by default (Laragon’s CA bundle is often outdated).
+
+For production, keep verification enabled:
+
+```env
+APP_ENV=production
+HTTP_VERIFY_SSL=true
+```
+
+To force verification locally with an updated bundle:
+
+```env
+HTTP_VERIFY_SSL=true
+HTTP_CLIENT_CA_BUNDLE=D:\laragon\etc\ssl\cacert.pem
+```
+
 ## License
 
 Proprietary — all rights reserved unless otherwise agreed with the client.

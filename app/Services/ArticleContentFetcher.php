@@ -2,7 +2,8 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Http;
+use App\Support\OutboundHttp;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Str;
 
 class ArticleContentFetcher
@@ -12,13 +13,18 @@ class ArticleContentFetcher
      */
     public function fromUrl(string $url): array
     {
-        $response = Http::timeout(20)
-            ->withHeaders([
-                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-                'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                'Accept-Language' => 'en-US,en;q=0.5',
-            ])
-            ->get($url);
+        try {
+            $response = OutboundHttp::client()
+                ->timeout(20)
+                ->withHeaders([
+                    'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'Accept-Language' => 'en-US,en;q=0.5',
+                ])
+                ->get($url);
+        } catch (ConnectionException) {
+            return ['title' => null, 'text' => ''];
+        }
 
         if (! $response->ok()) {
             return ['title' => null, 'text' => ''];
