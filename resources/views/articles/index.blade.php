@@ -6,9 +6,9 @@
     <header class="tl-hero">
         <div class="row align-items-center g-4">
             <div class="col-lg-8">
-                <p class="text-white-50 mb-2 small fw-semibold text-uppercase" style="letter-spacing: 0.08em;">Community verified</p>
-                <h1 class="display-6 fw-bold mb-3">See what others have checked</h1>
-                <p class="mb-0 lead fs-6">Browse analyzed articles with credibility scores from the Fact Check API and community votes. Submit your own link or paste text to add to the feed.</p>
+                <p class="text-white-50 mb-2 small fw-semibold text-uppercase" style="letter-spacing: 0.08em;">Public feed</p>
+                <h1 class="display-6 fw-bold mb-3">Verified articles</h1>
+                <p class="mb-0 lead fs-6">Browse completed credibility checks, scores, and community votes. Sign in to submit a new article for analysis.</p>
             </div>
             <div class="col-lg-4 text-lg-end">
                 @auth

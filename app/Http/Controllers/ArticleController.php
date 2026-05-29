@@ -53,7 +53,7 @@ class ArticleController extends Controller
         ProcessArticleSubmission::dispatch($article->id);
 
         return redirect()->route('articles.show', $article)
-            ->with('status', 'Your submission is being analyzed. Refresh this page in a few seconds.');
+            ->with('status', 'Your article is being analyzed. Refresh this page shortly to see the results.');
     }
 
     public function show(Article $article): View

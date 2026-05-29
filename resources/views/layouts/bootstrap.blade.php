@@ -20,7 +20,7 @@
                 <span class="tl-brand-mark" aria-hidden="true"><i class="bi bi-eye"></i></span>
                 <span class="d-flex flex-column lh-sm py-1">
                     <span>{{ config('app.name') }}</span>
-                    <span class="tl-brand-sub">Fake news check</span>
+                    <span class="tl-brand-sub">Credibility platform</span>
                 </span>
             </a>
             <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,7 +97,7 @@
 
     <footer class="tl-footer mt-auto">
         <div class="container d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2">
-            <span><i class="bi bi-info-circle me-1"></i> TruthLens combines automated fact-check signals with community input. Scores reflect API matches when available—not absolute truth.</span>
+            <span><i class="bi bi-info-circle me-1"></i> Scores reflect matched fact-check reviews and community input. They are indicators only—not a final judgment.</span>
             <span class="text-nowrap small">&copy; {{ date('Y') }} {{ config('app.name') }}</span>
         </div>
     </footer>

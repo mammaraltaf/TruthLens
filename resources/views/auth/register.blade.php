@@ -1,6 +1,6 @@
 <x-guest-layout>
     <h1 class="h4 fw-bold mb-1" style="letter-spacing: -0.02em;">{{ __('Create your account') }}</h1>
-    <p class="text-secondary small mb-4">{{ __('Join TruthLens to submit stories, vote, and build your verification history.') }}</p>
+    <p class="text-secondary small mb-4">{{ __('Create an account to submit articles, vote on results, and track your activity.') }}</p>
 
     <form method="POST" action="{{ route('register') }}" class="auth-form" novalidate>
         @csrf
@@ -22,7 +22,7 @@
             <div class="input-group">
                 <span class="input-group-text bg-light border-end-0 text-secondary"><i class="bi bi-envelope"></i></span>
                 <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="username"
-                    class="form-control border-start-0 ps-0 @error('email') is-invalid @enderror" placeholder="you@example.com">
+                    class="form-control border-start-0 ps-0 @error('email') is-invalid @enderror" placeholder="{{ __('Email address') }}">
             </div>
             @error('email')
                 <div class="text-danger small mt-1">{{ $message }}</div>

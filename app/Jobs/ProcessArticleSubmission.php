@@ -84,9 +84,12 @@ class ProcessArticleSubmission implements ShouldQueue
             return;
         }
 
-        $query = Str::limit(trim(($title ?? '').' '.$normalized), 500, '');
-        $apiPayload = $factCheckClient->searchClaims($query);
-        $scored = $scorer->score($apiPayload);
+        [$apiPayload, $scored] = $this->searchAndScore(
+            $factCheckClient,
+            $scorer,
+            is_string($title) ? trim($title) : '',
+            $normalized,
+        );
 
         $badge = Badge::findForScore($scored['score']);
 
@@ -110,6 +113,39 @@ class ProcessArticleSubmission implements ShouldQueue
         );
 
         $this->syncSource($article, $host);
+    }
+
+    /**
+     * @return array{0: array<string, mixed>|null, 1: array{score: float|null, verdict: string|null}}
+     */
+    private function searchAndScore(
+        GoogleFactCheckClient $factCheckClient,
+        FactCheckCredibilityScorer $scorer,
+        string $title,
+        string $content,
+    ): array {
+        $queries = [Str::limit(trim($title.' '.$content), 500, '')];
+        if ($title !== '') {
+            $queries[] = Str::limit($title, 500, '');
+        }
+
+        $apiPayload = null;
+        $scored = ['score' => null, 'verdict' => null];
+
+        foreach (array_unique($queries) as $query) {
+            if ($query === '') {
+                continue;
+            }
+
+            $apiPayload = $factCheckClient->searchClaims($query);
+            $scored = $scorer->score($apiPayload);
+
+            if ($scored['score'] !== null) {
+                break;
+            }
+        }
+
+        return [$apiPayload, $scored];
     }
 
     private function syncSource(Article $article, ?string $host): void

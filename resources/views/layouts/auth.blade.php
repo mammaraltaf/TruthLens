@@ -29,12 +29,12 @@
                     </span>
                 </a>
                 <p class="auth-aside-lead mt-5 mb-0 text-white-50">
-                    Cross-check news URLs and pasted text against fact-check databases, then see what the community thinks—all in one place.
+                    Submit a link or pasted article text for automated fact-check matching, then review community credibility votes on each result.
                 </p>
                 <ul class="auth-aside-list list-unstyled mt-4 mb-0 small text-white-50">
-                    <li class="d-flex gap-2 mb-2"><i class="bi bi-check-circle-fill text-teal mt-1"></i><span>Automated signals from the Fact Check API when configured</span></li>
-                    <li class="d-flex gap-2 mb-2"><i class="bi bi-check-circle-fill text-teal mt-1"></i><span>Community real / fake votes on every result</span></li>
-                    <li class="d-flex gap-2"><i class="bi bi-check-circle-fill text-teal mt-1"></i><span>Private dashboard for your submission history</span></li>
+                    <li class="d-flex gap-2 mb-2"><i class="bi bi-check-circle-fill text-teal mt-1"></i><span>Automated matching against published fact-check reviews</span></li>
+                    <li class="d-flex gap-2 mb-2"><i class="bi bi-check-circle-fill text-teal mt-1"></i><span>Community votes on every published result</span></li>
+                    <li class="d-flex gap-2"><i class="bi bi-check-circle-fill text-teal mt-1"></i><span>Personal dashboard for your submission history</span></li>
                 </ul>
             </div>
             <p class="small text-white-25 mb-0">&copy; {{ date('Y') }} {{ config('app.name') }}</p>

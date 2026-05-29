@@ -1,4 +1,4 @@
-        <?php
+<?php
 
 namespace Database\Seeders;
 
@@ -10,13 +10,15 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call(RoleSeeder::class);
-        $this->call(BadgeSeeder::class);
+        $this->call([
+            RoleSeeder::class,
+            BadgeSeeder::class,
+        ]);
 
         $admin = User::query()->updateOrCreate(
             ['email' => 'admin@truthlens.local'],
             [
-                'name' => 'TruthLens Admin',
+                'name' => 'Admin',
                 'password' => Hash::make('password'),
                 'email_verified_at' => now(),
                 'is_active' => true,
@@ -24,13 +26,14 @@ class DatabaseSeeder extends Seeder
         );
         $admin->syncRoles(['admin']);
 
-        User::factory()->create([
-            'name' => 'Demo User',
-            'email' => 'user@truthlens.local',
-            'password' => Hash::make('password'),
-            'email_verified_at' => now(),
-        ])->assignRole('user');
-
-        $this->call(ArticleFeedSeeder::class);
+        User::query()->updateOrCreate(
+            ['email' => 'user@truthlens.local'],
+            [
+                'name' => 'User',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'is_active' => true,
+            ]
+        )->assignRole('user');
     }
 }

@@ -50,7 +50,7 @@
 
                     @if ($numScore !== null)
                         <div class="tl-score-panel mb-4">
-                            <p class="tl-kicker mb-2">API-derived credibility</p>
+                            <p class="tl-kicker mb-2">Credibility score</p>
                             <div class="d-flex flex-wrap align-items-end gap-3 mb-3">
                                 <span class="tl-score-number">{{ number_format($numScore, 1) }}</span>
                                 <span class="text-secondary pb-1 fw-medium mb-1">/ 100</span>
@@ -63,7 +63,7 @@
                     @else
                         <div class="tl-score-panel mb-4 border border-2 border-dashed rounded-3" style="border-color: #cbd5e1 !important;">
                             <p class="mb-1 fw-semibold text-secondary"><i class="bi bi-cloud-slash me-2"></i>No automated score</p>
-                            <p class="small text-muted mb-0">No matching claims were found in the Google Fact Check database for this content. Community votes still help determine credibility.</p>
+                            <p class="small text-muted mb-0">No matching fact-check reviews were found for this content. Community votes are still recorded below.</p>
                         </div>
                     @endif
 
@@ -133,7 +133,7 @@
                                 <i class="bi bi-hand-thumbs-down me-1"></i> Not credible
                             </button>
                         </form>
-                        <p class="small text-muted mt-3 mb-0">One vote per account. Submit again to change your mind.</p>
+                        <p class="small text-muted mt-3 mb-0">One vote per account. You can change your vote at any time.</p>
                     @else
                         <a href="{{ route('login') }}" class="btn btn-primary w-100 rounded-pill fw-semibold">Log in to vote</a>
                     @endauth
@@ -161,7 +161,7 @@
 
             @if ($article->status->value !== 'completed')
                 <div class="alert alert-warning border-0 rounded-3 small mb-0">
-                    <i class="bi bi-hourglass-split me-1"></i> Still processing? Ensure a queue worker is running: <code class="small">php artisan queue:work</code>
+                    <i class="bi bi-hourglass-split me-1"></i> Analysis is still in progress. Refresh this page in a moment.
                 </div>
             @endif
         </div>

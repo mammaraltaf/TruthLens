@@ -16,7 +16,7 @@
             <div class="input-group">
                 <span class="input-group-text bg-light border-end-0 text-secondary"><i class="bi bi-envelope"></i></span>
                 <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username"
-                    class="form-control border-start-0 ps-0 @error('email') is-invalid @enderror" placeholder="you@example.com">
+                    class="form-control border-start-0 ps-0 @error('email') is-invalid @enderror" placeholder="{{ __('Email address') }}">
             </div>
             @error('email')
                 <div class="text-danger small mt-1">{{ $message }}</div>

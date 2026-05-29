@@ -8,10 +8,10 @@
     </div>
 
     <div class="row g-4">
-        <div class="col-lg-7 col-xl-8">
+        <div class="col-12 col-lg-8 col-xl-7">
             <p class="tl-kicker mb-1">New submission</p>
             <h1 class="tl-section-title h2 mb-2">Check credibility</h1>
-            <p class="text-secondary mb-4">Paste a URL to fetch the page text, or submit raw copy. Analysis uses the Google Fact Check Tools API when <code>GOOGLE_FACT_CHECK_API_KEY</code> is set.</p>
+            <p class="text-secondary mb-4">Provide a web address or paste the article text. We analyze the content against published fact-check databases and assign a credibility score when matches are found.</p>
 
             <form method="post" action="{{ route('articles.store') }}" class="card tl-card tl-form-card border-0" id="article-form">
                 @csrf
@@ -28,9 +28,9 @@
                         <label for="url" class="form-label fw-semibold"><i class="bi bi-link-45deg me-2 text-muted"></i>URL</label>
                         <div class="input-group input-group-lg tl-input-group-icon">
                             <span class="input-group-text border-end-0"><i class="bi bi-globe2"></i></span>
-                            <input type="url" name="url" id="url" value="{{ old('url') }}" class="form-control border-start-0 ps-0" placeholder="https://example.com/news/...">
+                            <input type="url" name="url" id="url" value="{{ old('url') }}" class="form-control border-start-0 ps-0" placeholder="https://">
                         </div>
-                        <div class="form-text" id="help-url">Required for URL mode. We strip tags and send a text excerpt to the fact-check API.</div>
+                        <div class="form-text" id="help-url">Required for URL mode. Page text is extracted automatically for analysis.</div>
                     </div>
 
                     <div class="mb-4" id="field-text-wrap">
@@ -57,18 +57,6 @@
                     </button>
                 </div>
             </form>
-        </div>
-        <div class="col-lg-5 col-xl-4">
-            <div class="card tl-card border-0 sticky-lg-top" style="top: 1rem;">
-                <div class="card-body p-4">
-                    <h2 class="h6 fw-bold mb-3"><i class="bi bi-lightbulb text-warning me-2"></i>Tips</h2>
-                    <ul class="small text-secondary ps-3 mb-0" style="line-height: 1.7;">
-                        <li class="mb-2">The API matches <strong>claims</strong>, not full stories—clear headlines or quotes work best.</li>
-                        <li class="mb-2"><strong>No API key</strong> still saves your submission; the badge will show as unverified.</li>
-                        <li class="mb-0">Duplicate text reuses the prior score and links submissions.</li>
-                    </ul>
-                </div>
-            </div>
         </div>
     </div>
 @endsection
