@@ -12,11 +12,6 @@ class ArticleVoteController extends Controller
 {
     public function store(Request $request, Article $article): RedirectResponse
     {
-        abort_unless(
-            $request->user() !== null && $request->user()->hasVerifiedEmail(),
-            403
-        );
-
         $data = $request->validate([
             'vote_type' => ['required', 'in:'.VoteType::Real->value.','.VoteType::Fake->value],
         ]);

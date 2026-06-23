@@ -2,6 +2,8 @@
 
 Web application for checking articles against published fact-check databases and collecting community credibility votes.
 
+**Documentation:** [USER_GUIDE.md](USER_GUIDE.md) — plain-language guide to features, badges, scoring, and how to use the app.
+
 ## Requirements
 
 - PHP 8.2+
