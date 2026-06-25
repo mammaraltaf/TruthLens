@@ -38,6 +38,11 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{ route('dashboard') }}"><i class="bi bi-speedometer2 me-1 opacity-75"></i> Dashboard</a>
                         </li>
+                        @if (Auth::user()->hasRole('admin'))
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="{{ route('admin.articles.index') }}"><i class="bi bi-shield-lock me-1 opacity-75"></i> Admin</a>
+                            </li>
+                        @endif
                     @endauth
                 </ul>
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
@@ -56,6 +61,9 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3 mt-2">
                                 <li><a class="dropdown-item rounded-2" href="{{ route('profile.edit') }}"><i class="bi bi-gear me-2 text-muted"></i> Profile</a></li>
+                                @if (Auth::user()->hasRole('admin'))
+                                    <li><a class="dropdown-item rounded-2" href="{{ route('admin.articles.index') }}"><i class="bi bi-shield-lock me-2 text-muted"></i> Admin articles</a></li>
+                                @endif
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}">

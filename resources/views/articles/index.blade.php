@@ -31,16 +31,20 @@
 
     <div class="row g-4">
         @forelse ($articles as $article)
+            @php
+                $feedScore = $article->resolvedCredibilityScore();
+                $feedBadge = $article->resolvedBadge();
+            @endphp
             <div class="col-md-6 col-xl-4">
                 <div
                     class="card tl-card tl-card-feed h-100 border-0 position-relative"
-                    style="--tl-accent: {{ $article->badge->color ?? '#94a3b8' }}"
+                    style="--tl-accent: {{ $feedBadge->color ?? '#94a3b8' }}"
                 >
                     <div class="card-body d-flex flex-column p-4">
                         <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
-                            @if ($article->badge)
-                                <span class="badge rounded-pill flex-shrink-0 border-0 shadow-sm" style="background: {{ $article->badge->color }}">
-                                    {{ $article->badge->name }}
+                            @if ($feedBadge)
+                                <span class="badge rounded-pill flex-shrink-0 border-0 shadow-sm" style="background: {{ $feedBadge->color }}">
+                                    {{ $feedBadge->name }}
                                 </span>
                             @endif
                             <span class="tl-meta-pill small">{{ $article->created_at->diffForHumans() }}</span>
@@ -54,10 +58,10 @@
                             {{ \Illuminate\Support\Str::limit(strip_tags($article->content), 130) }}
                         </p>
                         <div class="d-flex align-items-center justify-content-between mt-auto pt-2 border-top border-light-subtle">
-                            @if ($article->credibility_score !== null)
-                                <span class="small fw-semibold text-secondary"><i class="bi bi-speedometer2 me-1" style="color: var(--tl-teal);"></i> {{ $article->credibility_score }}<span class="text-muted fw-normal">/100</span></span>
+                            @if ($feedScore !== null)
+                                <span class="small fw-semibold text-secondary"><i class="bi bi-speedometer2 me-1" style="color: var(--tl-teal);"></i> {{ number_format($feedScore, 1) }}<span class="text-muted fw-normal">/100</span></span>
                             @else
-                                <span class="small text-muted"><i class="bi bi-question-circle me-1"></i> Unverified</span>
+                                <span class="small text-muted"><i class="bi bi-hourglass-split me-1"></i> Analyzing…</span>
                             @endif
                             <span class="small text-muted"><i class="bi bi-hand-thumbs-up me-1"></i>{{ $article->real_votes_count }} &nbsp; <i class="bi bi-hand-thumbs-down ms-1 me-1"></i>{{ $article->fake_votes_count }}</span>
                         </div>

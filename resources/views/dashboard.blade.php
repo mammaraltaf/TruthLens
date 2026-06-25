@@ -48,16 +48,26 @@
                 </thead>
                 <tbody>
                     @forelse ($articles as $article)
+                        @php
+                            $dashScore = $article->resolvedCredibilityScore();
+                            $dashBadge = $article->resolvedBadge();
+                        @endphp
                         <tr>
                             <td class="ps-4 fw-medium">{{ \Illuminate\Support\Str::limit($article->title ?: '—', 52) }}</td>
                             <td>
-                                @if ($article->badge)
-                                    <span class="badge rounded-pill border-0" style="background: {{ $article->badge->color }}">{{ $article->badge->name }}</span>
+                                @if ($dashBadge)
+                                    <span class="badge rounded-pill border-0" style="background: {{ $dashBadge->color }}">{{ $dashBadge->name }}</span>
                                 @else
                                     <span class="text-muted">—</span>
                                 @endif
                             </td>
-                            <td class="text-secondary">{{ $article->credibility_score ?? '—' }}</td>
+                            <td class="text-secondary">
+                                @if ($dashScore !== null)
+                                    {{ number_format($dashScore, 1) }}
+                                @else
+                                    —
+                                @endif
+                            </td>
                             <td><span class="tl-meta-pill text-capitalize">{{ $article->status->value }}</span></td>
                             <td class="pe-4 text-end">
                                 <a href="{{ route('articles.show', $article) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">View</a>

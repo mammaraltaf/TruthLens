@@ -18,7 +18,7 @@ class BadgeSeeder extends Seeder
                 'max_score' => 100,
             ],
             [
-                'name' => 'Suspicious',
+                'name' => 'Mixed',
                 'slug' => 'suspicious',
                 'color' => '#ffc107',
                 'min_score' => 40,

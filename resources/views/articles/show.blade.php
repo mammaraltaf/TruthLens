@@ -3,7 +3,8 @@
 @section('title', ($article->title ?: 'Article').' — '.config('app.name'))
 
 @php
-    $numScore = $article->credibility_score !== null ? (float) $article->credibility_score : null;
+    $numScore = $article->resolvedCredibilityScore();
+    $displayBadge = $article->resolvedBadge();
     $barClass = '';
     if ($numScore !== null) {
         $barClass = $numScore < 40 ? 'tl-progress-low' : ($numScore < 70 ? 'tl-progress-mid' : '');
@@ -20,9 +21,9 @@
             <article class="card tl-card border-0 mb-4">
                 <div class="card-body p-4 p-lg-5">
                     <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
-                        @if ($article->badge)
-                            <span class="badge rounded-pill px-3 py-2 border-0 shadow-sm" style="background: {{ $article->badge->color }}; font-size: 0.8rem;">
-                                {{ $article->badge->name }}
+                        @if ($displayBadge)
+                            <span class="badge rounded-pill px-3 py-2 border-0 shadow-sm" style="background: {{ $displayBadge->color }}; font-size: 0.8rem;">
+                                {{ $displayBadge->name }}
                             </span>
                         @endif
                         <span class="tl-meta-pill text-capitalize"><i class="bi bi-activity me-1"></i>{{ $article->status->value }}</span>
@@ -58,12 +59,12 @@
                             <div class="tl-progress-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ (int) $numScore }}" aria-label="Credibility score">
                                 <div class="tl-progress-bar {{ $barClass }}" style="width: {{ min(100, max(0, $numScore)) }}%;"></div>
                             </div>
-                            <p class="small text-secondary mt-3 mb-0">Based on matched fact-check ratings. Always read the original sources linked below.</p>
+                            <p class="small text-secondary mt-3 mb-0">Based on fact-check matches, publisher reputation, and content analysis. Always read the original sources linked below.</p>
                         </div>
-                    @else
+                    @elseif ($article->status->value !== 'completed')
                         <div class="tl-score-panel mb-4 border border-2 border-dashed rounded-3" style="border-color: #cbd5e1 !important;">
-                            <p class="mb-1 fw-semibold text-secondary"><i class="bi bi-cloud-slash me-2"></i>No automated score</p>
-                            <p class="small text-muted mb-0">No matching fact-check reviews were found for this content. Community votes are still recorded below.</p>
+                            <p class="mb-1 fw-semibold text-secondary"><i class="bi bi-hourglass-split me-2"></i>Score pending</p>
+                            <p class="small text-muted mb-0">Analysis is in progress. Refresh this page in a moment to see the credibility score.</p>
                         </div>
                     @endif
 

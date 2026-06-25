@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ArticleVoteController;
 use App\Http\Controllers\DashboardController;
@@ -19,6 +20,10 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 
 Route::get('/dashboard', DashboardController::class)->middleware(['auth'])->name('dashboard');
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/articles', [AdminArticleController::class, 'index'])->name('articles.index');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

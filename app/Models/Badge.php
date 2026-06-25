@@ -31,7 +31,7 @@ class Badge extends Model
     public static function findForScore(?float $score): ?self
     {
         if ($score === null) {
-            return self::query()->where('slug', 'unverified')->first();
+            $score = (float) config('truthlens.default_neutral_score', 50);
         }
 
         return self::query()

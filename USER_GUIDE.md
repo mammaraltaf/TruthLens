@@ -396,4 +396,4 @@ Fact-check API returns reviews?
 
 ---
 
-*TruthLens — Credibility platform. For technical installation details, see [README.md](README.md).*
+*TruthLens — Credibility platform. For technical installation details, see [README.md](README.md). For database design, see [DATABASE.md](DATABASE.md).*

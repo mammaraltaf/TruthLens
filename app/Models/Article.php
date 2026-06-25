@@ -89,4 +89,28 @@ class Article extends Model
     {
         return $this->votes()->where('vote_type', VoteType::Fake->value)->count();
     }
+
+    public function resolvedCredibilityScore(): ?float
+    {
+        if ($this->credibility_score !== null) {
+            return (float) $this->credibility_score;
+        }
+
+        if ($this->status === ArticleStatus::Completed) {
+            return (float) config('truthlens.default_neutral_score', 50);
+        }
+
+        return null;
+    }
+
+    public function resolvedBadge(): ?Badge
+    {
+        $score = $this->resolvedCredibilityScore();
+
+        if ($score === null) {
+            return $this->badge;
+        }
+
+        return Badge::findForScore($score) ?? $this->badge;
+    }
 }
