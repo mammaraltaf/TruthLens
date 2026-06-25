@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RoleSeeder::class,
+            PermissionSeeder::class,
             BadgeSeeder::class,
         ]);
 
@@ -25,6 +26,17 @@ class DatabaseSeeder extends Seeder
             ]
         );
         $admin->syncRoles(['admin']);
+
+        $moderator = User::query()->updateOrCreate(
+            ['email' => 'moderator@truthlens.local'],
+            [
+                'name' => 'Moderator',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'is_active' => true,
+            ]
+        );
+        $moderator->syncRoles(['moderator']);
 
         User::query()->updateOrCreate(
             ['email' => 'user@truthlens.local'],

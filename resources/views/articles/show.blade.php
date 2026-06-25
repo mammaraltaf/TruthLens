@@ -141,6 +141,35 @@
                 </div>
             </div>
 
+            @auth
+                <div class="card tl-card border-0 mb-4">
+                    <div class="card-header tl-card-header border-0">
+                        <i class="bi bi-flag me-2 text-muted"></i> Report content
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="post" action="{{ route('articles.reports.store', $article) }}" class="d-grid gap-3">
+                            @csrf
+                            <div>
+                                <label for="report_category" class="form-label small fw-semibold text-secondary">Reason</label>
+                                <select name="category" id="report_category" class="form-select form-select-sm rounded-3" required>
+                                    <option value="" disabled selected>Choose a category</option>
+                                    @foreach (\App\Enums\ReportCategory::cases() as $category)
+                                        <option value="{{ $category->value }}" @selected(old('category') === $category->value)>{{ ucfirst(str_replace('_', ' ', $category->value)) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="report_details" class="form-label small fw-semibold text-secondary">Details (optional)</label>
+                                <textarea name="details" id="report_details" rows="3" class="form-control form-control-sm rounded-3" maxlength="2000" placeholder="What is misleading or wrong about this content?">{{ old('details') }}</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill fw-semibold">
+                                <i class="bi bi-flag me-1"></i> Submit report
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @endauth
+
             <div class="card tl-card border-0 mb-4">
                 <div class="card-body p-4 small text-secondary">
                     @if ($article->source)

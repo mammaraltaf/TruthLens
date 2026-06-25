@@ -26,12 +26,15 @@ php artisan key:generate
 php artisan migrate --seed
 ```
 
-The seed step creates roles, credibility badges, and two local test accounts:
+The seed step creates roles, permissions, credibility badges, and three local test accounts:
 
-| Role  | Email                   | Password   |
-|-------|-------------------------|------------|
-| Admin | admin@truthlens.local   | `password` |
-| User  | user@truthlens.local    | `password` |
+| Role  | Email                        | Password   |
+|-------|------------------------------|------------|
+| Admin | admin@truthlens.local        | `password` |
+| Moderator | moderator@truthlens.local | `password` |
+| User  | user@truthlens.local         | `password` |
+
+**Staff routes** (moderator & admin): `/admin` (overview), `/admin/articles`, `/admin/reports`, `/admin/reports/export` (CSV download), `/admin/sources`. See [USER_GUIDE.md](USER_GUIDE.md) §4.13 for details.
 
 Change or remove these accounts before production deployment.
 

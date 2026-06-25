@@ -21,14 +21,20 @@ TruthLens does **not** decide absolute truth. It combines **automated fact-check
 
 ## 2. Who can do what?
 
-| Action | Visitor (not logged in) | Logged-in user | Admin |
-|--------|-------------------------|----------------|-------|
-| Browse the public feed | Yes | Yes | Yes |
-| Open article details | Yes | Yes | Yes |
-| Submit a new article | No | Yes | Yes |
-| Vote on articles | No | Yes* | Yes* |
-| View personal dashboard | No | Yes | Yes |
-| Edit profile | No | Yes | Yes |
+| Action | Visitor (not logged in) | Logged-in user | Moderator | Admin |
+|--------|-------------------------|----------------|-----------|-------|
+| Browse the public feed | Yes | Yes | Yes | Yes |
+| Open article details | Yes | Yes | Yes | Yes |
+| Submit a new article | No | Yes | Yes | Yes |
+| Vote on articles | No | Yes* | Yes* | Yes* |
+| Report misleading content | No | Yes | Yes | Yes |
+| View personal dashboard | No | Yes | Yes | Yes |
+| Edit profile | No | Yes | Yes | Yes |
+| Staff area (moderation tools) | No | No | Yes | Yes |
+| View all users’ articles | No | No | Yes | Yes |
+| Review article reports | No | No | Yes | Yes |
+| Download reports (CSV) | No | No | Yes | Yes |
+| Manage publisher sources (ban/trust) | No | No | Yes | Yes |
 
 \* Voting requires a signed-in account whose email is marked as verified. Accounts created by the local database seeder are pre-verified for testing.
 
@@ -43,6 +49,11 @@ TruthLens does **not** decide absolute truth. It combines **automated fact-check
 | Check article | `/articles/create` | Submit a URL or pasted text (login required) |
 | Dashboard | `/dashboard` | Your submission history and stats |
 | Profile | `/profile` | Update name, email, bio, password |
+| Staff overview | `/admin` | Moderation dashboard (moderator & admin only) |
+| All articles (staff) | `/admin/articles` | Every submission from all users |
+| Report queue (staff) | `/admin/reports` | Review and resolve user flags |
+| Download reports (staff) | `/admin/reports/export` | CSV export of the report queue |
+| Sources (staff) | `/admin/sources` | Manage domains, trust scores, bans |
 | Register | `/register` | Create an account |
 | Log in | `/login` | Sign in |
 
@@ -192,11 +203,37 @@ Rules:
 - Vote totals are visible to everyone
 - Visitors can see counts but cannot vote
 
-Community votes are **separate** from the automated score. An article can be **Unverified** automatically but still receive many community votes.
+Community votes are **separate** from the automated score. An article can score low automatically but still receive many community votes.
 
 ---
 
-### 4.8 Dashboard
+### 4.8 Report misleading content
+
+**Login required.**
+
+On any article detail page, use the **Report content** panel in the sidebar to flag a submission for staff review.
+
+Choose a **reason**:
+
+| Category | When to use it |
+|----------|----------------|
+| **Misleading** | Content appears deceptive or twisted |
+| **Satire** | Presented as fact but is satire/parody |
+| **Out of context** | Quote or clip missing important context |
+| **Fabricated** | Appears wholly made up |
+| **Other** | Does not fit the categories above |
+
+Add optional **details** (up to 2,000 characters), then click **Submit report**.
+
+Rules:
+
+- One **pending** report per account per article at a time
+- Staff (moderators and admins) review reports in the **Report queue**
+- Reports are marked **reviewed** or **dismissed**; the reviewer and timestamp are recorded
+
+---
+
+### 4.9 Dashboard
 
 Your personal overview after login:
 
@@ -209,7 +246,7 @@ Use **New check** to submit another article.
 
 ---
 
-### 4.9 Profile & account
+### 4.10 Profile & account
 
 From the menu under your name → **Profile**:
 
@@ -220,7 +257,7 @@ From the menu under your name → **Profile**:
 
 ---
 
-### 4.10 Registration & login
+### 4.11 Registration & login
 
 - **Register** — Name, email, password (minimum 8 characters)
 - **Log in** — Email and password
@@ -230,17 +267,62 @@ Email verification is currently **disabled** for new sign-ups in this build, but
 
 ---
 
-### 4.11 User roles (system level)
+### 4.12 User roles (system level)
 
-The application supports three roles in the database:
+The application supports three roles in the database (via [Spatie Permission](https://github.com/spatie/laravel-permission)):
 
 | Role | Typical use |
 |------|-------------|
-| **admin** | Full access; first admin created by database seeder |
-| **moderator** | Reserved for future moderation tools |
+| **admin** | Full staff access; all moderation permissions |
+| **moderator** | Staff moderation: articles, reports, sources |
 | **user** | Default role for new registrations |
 
-Day-to-day use (submit, vote, dashboard) is the same for standard users and admins in the current version.
+**Staff permissions** (assigned to moderator; admin receives all):
+
+| Permission | What it allows |
+|------------|----------------|
+| `view all articles` | Browse `/admin/articles` — all users’ submissions |
+| `review reports` | Open `/admin/reports`, resolve flags, download CSV |
+| `manage sources` | Open `/admin/sources`, adjust trust scores, ban domains |
+
+Day-to-day use (submit, vote, personal dashboard) is the same for users, moderators, and admins. Only **staff** roles see the **Staff** link in the navigation.
+
+---
+
+### 4.13 Staff area (moderator & admin)
+
+Open **Staff** in the navbar or go to `/admin`.
+
+#### Overview (`/admin`)
+
+Summary cards for total articles, completed analyses, pending reports, and banned sources. Quick links to each moderation section.
+
+#### All articles (`/admin/articles`)
+
+- Lists **every article** submitted by **any user**
+- Filter by status: all, completed, pending, processing, failed
+- Columns: ID, title, URL, author (name & email), type, badge, score, status, submitted date
+- **View** opens the public article page
+
+#### Report queue (`/admin/reports`)
+
+- Lists user-submitted flags from article pages
+- Filter by: all, pending, reviewed, dismissed
+- For each report: article link, reporter, category, details, status, reviewer
+- **Reviewed** — staff has actioned the report
+- **Dismiss** — report rejected or not actionable
+- **Download CSV** — exports the current filter to a spreadsheet (`/admin/reports/export`)
+
+CSV columns: report ID, article ID, article title, reporter name/email, category, details, status, reviewed by, reviewed at, created at.
+
+#### Publisher sources (`/admin/sources`)
+
+- Lists domains seen in URL submissions (e.g. `snopes.com`, `bbc.com`)
+- Edit **trust score** (0–100) per domain
+- **Ban** / **Unban** domains (`is_banned` on the `sources` table)
+- Filter to banned domains only
+
+Banned domains are recorded for moderation; future submissions from those domains can be restricted in later versions.
 
 ---
 
@@ -323,6 +405,7 @@ For installers and developers, see **README.md**. Short version:
 | Role | Email | Password |
 |------|-------|----------|
 | Admin | `admin@truthlens.local` | `password` |
+| Moderator | `moderator@truthlens.local` | `password` |
 | User | `user@truthlens.local` | `password` |
 
 Change these before going live.

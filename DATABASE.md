@@ -287,9 +287,9 @@ Threaded discussion on articles.
 
 ---
 
-### 4.8 `article_reports` *(schema ready; UI not implemented)*
+### 4.8 `article_reports`
 
-User flags on misleading content.
+User flags on misleading content. Submitted from the article detail page; reviewed in the staff report queue (`/admin/reports`).
 
 | Column | Type | Description |
 |--------|------|-------------|
@@ -299,8 +299,10 @@ User flags on misleading content.
 | `category` | varchar(32) | `misleading`, `satire`, `out_of_context`, `fabricated`, `other` |
 | `details` | text | Optional explanation |
 | `status` | varchar(32) | `pending`, `reviewed`, `dismissed` |
-| `reviewed_by` | bigint FK → `users` | Moderator/admin |
+| `reviewed_by` | bigint FK → `users` | Moderator/admin who resolved the report |
 | `reviewed_at` | timestamp | When resolved |
+
+**Staff UI:** list, filter, mark reviewed/dismissed, CSV export at `GET /admin/reports/export`.
 
 ---
 
@@ -311,12 +313,20 @@ User flags on misleading content.
 | Table | Purpose |
 |-------|---------|
 | `roles` | Named roles (`admin`, `moderator`, `user`) |
-| `permissions` | Fine-grained permissions (extensible) |
+| `permissions` | `view all articles`, `review reports`, `manage sources` (seeded by `PermissionSeeder`) |
 | `model_has_roles` | Assigns roles to `User` (polymorphic) |
 | `model_has_permissions` | Direct user permissions (optional) |
 | `role_has_permissions` | Permissions attached to roles |
 
-**Normalization:** Many-to-many between users and roles is decomposed into a pivot table instead of duplicating role names on `users`.
+**Role → permission mapping** (see `database/seeders/PermissionSeeder.php`):
+
+| Role | Permissions |
+|------|-------------|
+| `moderator` | view all articles, review reports, manage sources |
+| `admin` | All permissions |
+| `user` | None (standard app features only) |
+
+**Route protection:** staff pages use middleware `role:admin|moderator` under the `/admin` prefix.
 
 ### 5.2 `sessions`
 
@@ -376,6 +386,8 @@ These support Laravel runtime behaviour and are not specific to TruthLens busine
 4. Else API call → INSERT/UPDATE fact_check_results
                  → UPDATE articles (badge_id, credibility_score, status = completed)
 5. If URL       → INSERT/UPDATE sources; SET articles.source_id
+6. User reports → INSERT article_reports (status = pending)
+7. Staff review → UPDATE article_reports (status, reviewed_by, reviewed_at)
 ```
 
 ---
@@ -441,7 +453,7 @@ If the product grows, consider:
 | 5 | `fact_check_results` | Analysis |
 | 6 | `article_votes` | Engagement |
 | 7 | `comments` | Engagement (future) |
-| 8 | `article_reports` | Moderation (future) |
+| 8 | `article_reports` | Moderation |
 | 9 | `roles` | Authorization |
 | 10 | `permissions` | Authorization |
 | 11 | `model_has_roles` | Authorization pivot |

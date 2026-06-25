@@ -3,6 +3,8 @@
 @section('title', 'Admin — All articles — '.config('app.name'))
 
 @section('content')
+    @include('admin._nav')
+
     <p class="tl-kicker mb-1">Administration</p>
     <h1 class="tl-section-title h2 mb-4">All articles</h1>
 
